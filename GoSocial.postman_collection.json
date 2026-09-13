@@ -1,0 +1,151 @@
+{
+  "info": {
+    "name": "GoSocial",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/v1" },
+    { "key": "postId", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "followerId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Get All Posts",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/posts"
+      }
+    },
+    {
+      "name": "Get All Users",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users"
+      }
+    },
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.data && body.data.id) {",
+              "    pm.collectionVariables.set(\"userId\", body.data.id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/users",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"123123\",\n    \"email\": \"testuser@example.com\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get User By ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}"
+      }
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/users/{{userId}}"
+      }
+    },
+    {
+      "name": "Follow User",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/users/{{userId}}/follow",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": {{followerId}}\n}"
+        },
+        "description": "userId in the URL is the user being followed; user_id in the body is the follower's ID."
+      }
+    },
+    {
+      "name": "Unfollow User",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/users/{{userId}}/unfollow",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": {{followerId}}\n}"
+        },
+        "description": "userId in the URL is the user being unfollowed; user_id in the body is the follower's ID."
+      }
+    },
+    {
+      "name": "Create Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.data && body.data.id) {",
+              "    pm.collectionVariables.set(\"postId\", body.data.id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/posts",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Getting Started with Go\",\n    \"content\": \"This is a sample post used for seeding the database.\",\n    \"tags\": [\"go\", \"seed\"]\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Post By ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/posts/{{postId}}"
+      }
+    },
+    {
+      "name": "Update Post",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/posts/{{postId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Updated title\",\n    \"content\": \"Updated content after seeding.\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Delete Post",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/posts/{{postId}}"
+      }
+    }
+  ]
+}
