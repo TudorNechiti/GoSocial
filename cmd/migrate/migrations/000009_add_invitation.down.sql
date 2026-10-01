@@ -1,0 +1,2 @@
+ALTER TABLE users DROP COLUMN IF EXISTS is_active;
+DROP TABLE IF EXISTS user_invitations;

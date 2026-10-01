@@ -14,7 +14,7 @@ func New(addr string, maxOpenConns int, maxIdleConns int, maxidleTime string) (*
 
 	db.SetMaxOpenConns(maxOpenConns)
 	db.SetMaxIdleConns(maxIdleConns)
-	
+
 	duration, err := time.ParseDuration(maxidleTime)
 	if err != nil {
 		return nil, err
